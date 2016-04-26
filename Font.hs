@@ -30,20 +30,27 @@ instance Show Letter where
 			bool2string False = "."
 
 -- Split the ByteString into a list of smaller ByteStrings.
-splitEvery :: Int -> BS.ByteString -> [BS.ByteString]
+splitEvery :: Int             -- size of each new sub-ByteString
+           -> BS.ByteString   -- ByteString to split
+					 -> [BS.ByteString] -- list of sub-ByteStrings
 splitEvery n bs
 	| n <= 0 || BS.null bs = []
 	| otherwise = BS.take n bs:splitEvery n (BS.drop n bs)
 
 -- Load an alphabet from the ByteString data.
-loadAlphabet :: Char -> Int -> [BS.ByteString] -> [(Char, Letter)]
+loadAlphabet :: Char             -- starting letter of the alphabet
+             -> Int              -- width of each letter in bytes
+             -> [BS.ByteString]  -- input ByteString blocks
+             -> [(Char, Letter)] -- associative list of alphabet letters
 loadAlphabet start w bss = zipWith (,) [start .. end] letters
 	where
 		end = chr $ (ord start) + 25
 		letters = map (Letter w) (take 26 $ drop (ord start) bss)
 
 -- Load a FreeBSD bitmap font.
-fontLoad :: FilePath -> (Int, Int) -> IO Font
+fontLoad :: FilePath   -- path to the font file
+         -> (Int, Int) -- width and height of each letter in bits
+         -> IO Font    -- loaded font
 fontLoad path (w, h) = do
 	content <- BS.readFile path
 	let letters = splitEvery (w * h `div` 8) content
@@ -52,6 +59,8 @@ fontLoad path (w, h) = do
 	return $ MP.fromList (upperAlphabet ++ lowerAlphabet)
 
 -- Find a corresponding font letter for the character.
-fontGetLetter :: Font -> Char -> Maybe Letter
+fontGetLetter :: Font         -- font
+              -> Char         -- requested character
+              -> Maybe Letter -- a letter after the lookup
 fontGetLetter font char = MP.lookup char font
 
