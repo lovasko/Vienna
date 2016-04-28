@@ -1,3 +1,10 @@
+module Font
+( Font(..)
+, Letter(..)
+, fontLoad
+, fontGetLetter
+) where
+
 import qualified Data.Map as MP
 import qualified Data.ByteString as BS
 import Data.Word
