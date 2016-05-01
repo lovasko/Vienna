@@ -11,17 +11,17 @@ test1 :: Int
       -> IO () 
 test1 neuronCount teachLimit askLimit = do
   font <- fontLoad "swiss-8x16.fnt" (8, 16)
-  let (Letter _ letter1) = fromJust $ fontGetLetter font 'i'
-  let (Letter _ letter2) = fromJust $ fontGetLetter font 'B'
-  let (Letter _ letter3) = fromJust $ fontGetLetter font 't'
-  let (Letter _ letter4) = fromJust $ fontGetLetter font 'G'
-  let (Letter _ letter5) = fromJust $ fontGetLetter font 'I'
+  let (Glyph _ glyph1) = fromJust $ fontGetGlyph font 'i'
+  let (Glyph _ glyph2) = fromJust $ fontGetGlyph font 'B'
+  let (Glyph _ glyph3) = fromJust $ fontGetGlyph font 't'
+  let (Glyph _ glyph4) = fromJust $ fontGetGlyph font 'G'
+  let (Glyph _ glyph5) = fromJust $ fontGetGlyph font 'I'
 
   b1 <- brainNew 128 neuronCount
-  let b2 = brainTeach b1 (bitString letter1, bitString letter2) teachLimit
-  let b3 = brainTeach b2 (bitString letter3, bitString letter4) teachLimit 
+  let b2 = brainTeach b1 (bitString glyph1, bitString glyph2) teachLimit
+  let b3 = brainTeach b2 (bitString glyph3, bitString glyph4) teachLimit
 
-  let output = brainAsk b3 (bitString letter5) askLimit
-  putStrLn $ show $ Letter 1 (realizeBitStringStrict output)
+  let output = brainAsk b3 (bitString glyph5) askLimit
+  putStrLn $ show $ Glyph 1 (realizeBitStringStrict output)
   return ()
 
