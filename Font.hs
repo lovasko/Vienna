@@ -3,6 +3,7 @@ module Font
 , Glyph(..)
 , fontLoad
 , fontGetGlyph
+, fontGetAllGlyphs
 ) where
 
 import qualified Data.Map as MP
@@ -66,8 +67,13 @@ fontLoad path (w, h) = do
   return $ MP.fromList (upperAlphabet ++ lowerAlphabet)
 
 -- Find a corresponding font glyph for the character.
-fontGetGlyph :: Font         -- font
-              -> Char        -- requested character
-              -> Maybe Glyph -- a glyph after the lookup
+fontGetGlyph :: Font        -- font
+             -> Char        -- requested character
+             -> Maybe Glyph -- a glyph after the lookup
 fontGetGlyph font char = MP.lookup char font
+
+-- Associative list of all the character/glyph pairs in the font.
+fontGetAllGlyphs :: Font
+                 -> [(Char, Glyph)]
+fontGetAllGlyphs font = MP.toList font
 

@@ -18,8 +18,8 @@ test1 neuronCount teachLimit askLimit = do
   let (Glyph _ glyph5) = fromJust $ fontGetGlyph font 'I'
 
   b1 <- brainNew 128 neuronCount
-  let b2 = brainTeach b1 (bitString glyph1, bitString glyph2) teachLimit
-  let b3 = brainTeach b2 (bitString glyph3, bitString glyph4) teachLimit
+  let b2 = brainTeach teachLimit (bitString glyph1, bitString glyph2) b1 
+  let b3 = brainTeach teachLimit (bitString glyph3, bitString glyph4) b2 
 
   let output = brainAsk b3 (bitString glyph5) askLimit
   putStrLn $ show $ Glyph 1 (realizeBitStringStrict output)

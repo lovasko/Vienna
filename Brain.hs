@@ -25,11 +25,11 @@ brainNew :: Int      -- size of the input in bytes
 brainNew inputSize neuronCount = replicateM neuronCount (newNeuron inputSize)
 
 -- Teach the brain a new input/output pair.
-brainTeach :: Brain           -- old brain
+brainTeach :: Int             -- threshold for the neuron attraction 
            -> (Input, Output) -- input/output pair
-           -> Int             -- threshold for the neuron attraction 
+           -> Brain           -- old brain
            -> Brain           -- new brain
-brainTeach neurons (input, output) threshold = newNeurons
+brainTeach threshold (input, output) neurons = newNeurons
   where
     newNeurons = dontcare ++ (map (stimulateNeuron output) attracted)
     (attracted, dontcare) = partition (isNeuronAttracted input threshold) neurons
